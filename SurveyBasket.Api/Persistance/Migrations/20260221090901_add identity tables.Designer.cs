@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SurveyBasket.Api.Persistance;
 
@@ -11,9 +12,11 @@ using SurveyBasket.Api.Persistance;
 namespace SurveyBasket.Api.Persistance.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260221090901_add identity tables")]
+    partial class addidentitytables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,26 +231,6 @@ namespace SurveyBasket.Api.Persistance.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "D765FB08-3390-445C-BF80-07BECDB1F816",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "88995738-D0E0-469F-83C3-E9D2849E7C05",
-                            Email = "ahmed.samir@test.com",
-                            EmailConfirmed = true,
-                            FirstName = "Ahmed",
-                            LastName = "Samir",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "AHMED.SAMIR@TEST.COM",
-                            NormalizedUserName = "AHMED.SAMIR@TEST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDPzaCWUjcyjDvzZqzBikkqaAXBkjPE67YVFac5bd2oCHN3pElUCJ3MgujYdxnV+Rg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "C3688126-B817-4523-9D07-160B8808A613",
-                            TwoFactorEnabled = false,
-                            UserName = "ahmed.samir@test.com"
-                        });
                 });
 
             modelBuilder.Entity("SurveyBasket.Api.Entities.Poll", b =>

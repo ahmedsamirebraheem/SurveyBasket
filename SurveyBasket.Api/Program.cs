@@ -2,7 +2,6 @@ using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using SurveyBasket.Api;
-using SurveyBasket.Api.Contracts.Validations;
 using SurveyBasket.Api.Persistance;
 using SurveyBasket.Api.Services;
 using System.Reflection;
@@ -11,7 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDependencies(builder.Configuration);
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
