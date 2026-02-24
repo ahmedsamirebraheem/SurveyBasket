@@ -4,7 +4,10 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
 {
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
-        
+        builder.OwnsMany(u => u.RefreshTokens)
+            .ToTable("RefreshTokens")
+            .WithOwner()
+            .HasForeignKey("UserId");
 
         builder.Property(u=>u.FirstName)
             .HasMaxLength(100);
