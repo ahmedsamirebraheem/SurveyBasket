@@ -18,6 +18,17 @@ public static class DependencyInjection
     {
         services.AddControllers();
 
+        services.AddCors(op =>
+        {
+            op.AddDefaultPolicy(builder =>
+            {
+                builder
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithOrigins(configuration.GetSection("AllowedOrigins").Get<string[]>()!);
+            });
+        });
+
         services.AddAuthConfig(configuration);
 
         var connectionString = configuration.GetConnectionString("DefaultConnection") ??
@@ -75,7 +86,7 @@ public static class DependencyInjection
             };
         })
             ;
-        
+
         return services;
     }
 }
