@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SurveyBasket.Api.Entities;
+﻿namespace SurveyBasket.Entities;
 
 public sealed class Poll : AuditableEntity
 {
@@ -10,6 +8,4 @@ public sealed class Poll : AuditableEntity
     public bool IsPublished { get; set; }
     public DateOnly StartsAt { get; set; }
     public DateOnly EndsAt { get; set; }
-   
-
 }

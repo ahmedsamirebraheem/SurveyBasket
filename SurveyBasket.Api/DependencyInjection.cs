@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
-using SurveyBasket.Api.Authentication;
-using SurveyBasket.Api.Persistance;
+using SurveyBasket.Authentication;
 using System.Reflection;
 using System.Text;
 

@@ -1,35 +1,28 @@
-﻿namespace SurveyBasket.Api.Contracts.Polls;
+﻿namespace SurveyBasket.Contracts.Polls;
 
-public class PollRequestValidator : AbstractValidator<PollRequest>
+public class LoginRequestValidator : AbstractValidator<PollRequest>
 {
-    public PollRequestValidator()
+    public LoginRequestValidator()
     {
         RuleFor(x => x.Title)
             .NotEmpty()
-            .WithMessage("Title is required.")
-            .Length(3, 100)
-            .WithMessage("Title must be between 3 and 100 characters.");
+            .Length(3, 100);
+
         RuleFor(x => x.Summary)
             .NotEmpty()
-            .WithMessage("Description is required.")
-            .Length(1, 1500)
-            .WithMessage("Description must be between 1 and 1500 characters.");
+            .Length(3, 1500);
 
         RuleFor(x => x.StartsAt)
-         .NotEmpty()
-         .WithMessage("Start date is required.")
-         .GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.Today))
-         .WithMessage("Start date cannot be in the past.");
+            .NotEmpty()
+            .GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.Today));
 
         RuleFor(x => x.EndsAt)
-            .NotEmpty()
-            .WithMessage("End date is required.");
+            .NotEmpty();
 
-        RuleFor(x=>x)
+        RuleFor(x => x)
             .Must(HasValidDates)
             .WithName(nameof(PollRequest.EndsAt))
-            .WithMessage("{PropertyName} Should be greater than or equal Start date");
-
+            .WithMessage("{PropertyName} must be greater than or equals start date");
     }
 
     private bool HasValidDates(PollRequest pollRequest)
@@ -37,4 +30,3 @@ public class PollRequestValidator : AbstractValidator<PollRequest>
         return pollRequest.EndsAt >= pollRequest.StartsAt;
     }
 }
-

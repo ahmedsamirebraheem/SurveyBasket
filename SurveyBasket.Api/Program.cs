@@ -2,8 +2,6 @@ using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using SurveyBasket.Api;
-using SurveyBasket.Api.Persistance;
-using SurveyBasket.Api.Services;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);

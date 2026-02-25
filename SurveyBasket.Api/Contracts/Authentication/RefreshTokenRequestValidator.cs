@@ -1,16 +1,10 @@
-﻿namespace SurveyBasket.Api.Contracts.Authentication;
+﻿namespace SurveyBasket.Contracts.Authentication;
 
 public class RefreshTokenRequestValidator : AbstractValidator<RefreshTokenRequest>
 {
     public RefreshTokenRequestValidator()
     {
-        RuleFor(x => x.token)
-            .NotEmpty();
-        RuleFor(x => x.refreshToken)
-            .NotEmpty();
-
-             
+        RuleFor(x => x.Token).NotEmpty();
+        RuleFor(x => x.RefreshToken).NotEmpty();
     }
-
-
 }

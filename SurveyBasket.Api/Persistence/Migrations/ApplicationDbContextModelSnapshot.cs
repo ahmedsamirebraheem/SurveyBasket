@@ -3,24 +3,21 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SurveyBasket.Api.Persistance;
+using SurveyBasket.Persistence;
 
 #nullable disable
 
-namespace SurveyBasket.Api.Persistance.Migrations
+namespace SurveyBasket.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260224121753_Add Ahmed samir")]
-    partial class AddAhmedsamir
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.3")
+                .HasAnnotation("ProductVersion", "9.0.0-preview.2.24128.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -158,7 +155,7 @@ namespace SurveyBasket.Api.Persistance.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("SurveyBasket.Api.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("SurveyBasket.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -231,29 +228,9 @@ namespace SurveyBasket.Api.Persistance.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "D765FB08-3390-445C-BF80-07BECDB1F816",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "88995738-D0E0-469F-83C3-E9D2849E7C05",
-                            Email = "ahmed.samir@test.com",
-                            EmailConfirmed = true,
-                            FirstName = "Ahmed",
-                            LastName = "Samir",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "AHMED.SAMIR@TEST.COM",
-                            NormalizedUserName = "AHMED.SAMIR@TEST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBZiV4ovFqxy298dGbBJQ0YTX0thl24vwW8ynjggg+MtYZ6E2VCFSt8vyDL90FTBoA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "C3688126-B817-4523-9D07-160B8808A613",
-                            TwoFactorEnabled = false,
-                            UserName = "ahmed.samir@test.com"
-                        });
                 });
 
-            modelBuilder.Entity("SurveyBasket.Api.Entities.Poll", b =>
+            modelBuilder.Entity("SurveyBasket.Entities.Poll", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -316,7 +293,7 @@ namespace SurveyBasket.Api.Persistance.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("SurveyBasket.Api.Entities.ApplicationUser", null)
+                    b.HasOne("SurveyBasket.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -325,7 +302,7 @@ namespace SurveyBasket.Api.Persistance.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("SurveyBasket.Api.Entities.ApplicationUser", null)
+                    b.HasOne("SurveyBasket.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -340,7 +317,7 @@ namespace SurveyBasket.Api.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SurveyBasket.Api.Entities.ApplicationUser", null)
+                    b.HasOne("SurveyBasket.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -349,16 +326,16 @@ namespace SurveyBasket.Api.Persistance.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("SurveyBasket.Api.Entities.ApplicationUser", null)
+                    b.HasOne("SurveyBasket.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SurveyBasket.Api.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("SurveyBasket.Entities.ApplicationUser", b =>
                 {
-                    b.OwnsMany("SurveyBasket.Api.Entities.RefreshToken", "RefreshTokens", b1 =>
+                    b.OwnsMany("SurveyBasket.Entities.RefreshToken", "RefreshTokens", b1 =>
                         {
                             b1.Property<string>("UserId")
                                 .HasColumnType("nvarchar(450)");
@@ -393,15 +370,15 @@ namespace SurveyBasket.Api.Persistance.Migrations
                     b.Navigation("RefreshTokens");
                 });
 
-            modelBuilder.Entity("SurveyBasket.Api.Entities.Poll", b =>
+            modelBuilder.Entity("SurveyBasket.Entities.Poll", b =>
                 {
-                    b.HasOne("SurveyBasket.Api.Entities.ApplicationUser", "CreatedBy")
+                    b.HasOne("SurveyBasket.Entities.ApplicationUser", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SurveyBasket.Api.Entities.ApplicationUser", "UpdatedBy")
+                    b.HasOne("SurveyBasket.Entities.ApplicationUser", "UpdatedBy")
                         .WithMany()
                         .HasForeignKey("UpdatedById");
 

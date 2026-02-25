@@ -1,4 +1,4 @@
-﻿namespace SurveyBasket.Api.Contracts.Authentication;
+﻿namespace SurveyBasket.Contracts.Authentication;
 
 public record AuthResponse(
     string Id,
@@ -8,4 +8,5 @@ public record AuthResponse(
     string Token,
     int ExpiresIn,
     string RefreshToken,
-    DateTime RefreshTokenExpiration);
+    DateTime RefreshTokenExpiration
+);

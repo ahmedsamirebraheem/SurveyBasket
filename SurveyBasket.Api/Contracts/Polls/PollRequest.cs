@@ -1,7 +1,8 @@
-﻿namespace SurveyBasket.Api.Contracts.Polls;
+﻿namespace SurveyBasket.Contracts.Polls;
 
-public record PollRequest(string Title,
+public record PollRequest(
+    string Title,
     string Summary,
     DateOnly StartsAt,
-    DateOnly EndsAt);
-
+    DateOnly EndsAt
+);
