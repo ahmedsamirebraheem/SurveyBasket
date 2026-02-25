@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.Data;
+using SurveyBasket.Api.Abstractions;
 using LoginRequest = SurveyBasket.Contracts.Authentication.LoginRequest;
 
 namespace SurveyBasket.Controllers;
@@ -15,7 +16,9 @@ public class AuthController(IAuthService authService) : ControllerBase
     {
         var authResult = await _authService.GetTokenAsync(request.Email, request.Password, cancellationToken);
 
-        return authResult.IsSuccess ? Ok(authResult.Value) : Problem(statusCode: StatusCodes.Status400BadRequest, title: authResult.Error.Code, detail: authResult.Error.Description);
+        return authResult.IsSuccess
+            ? Ok(authResult.Value)
+            : authResult.ToProblem();
 
         //return authResult.Match(
         //    Ok,
@@ -28,7 +31,9 @@ public class AuthController(IAuthService authService) : ControllerBase
     {
         var authResult = await _authService.GetRefreshTokenAsync(request.Token, request.RefreshToken, cancellationToken);
 
-        return authResult.IsSuccess ? Ok(authResult.Value) : Problem(statusCode: StatusCodes.Status400BadRequest, title: authResult.Error.Code, detail: authResult.Error.Description);
+        return authResult.IsSuccess 
+            ? Ok(authResult.Value) 
+            : authResult.ToProblem();
     }
 
     [HttpPost("revoke-refresh-token")]
@@ -36,6 +41,6 @@ public class AuthController(IAuthService authService) : ControllerBase
     {
         var result = await _authService.RevokeRefreshTokenAsync(request.Token, request.RefreshToken, cancellationToken);
 
-        return result.IsSuccess ? Ok() : Problem(statusCode: StatusCodes.Status400BadRequest, title: result.Error.Code, detail: result.Error.Description);
+        return result.IsSuccess ? Ok() : result.ToProblem();
     }
 }
