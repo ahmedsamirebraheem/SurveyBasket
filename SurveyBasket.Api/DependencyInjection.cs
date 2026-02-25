@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using SurveyBasket.Api.Errors;
+using SurveyBasket.Api.Services;
 using SurveyBasket.Authentication;
 using System.Reflection;
 using System.Text;
@@ -39,6 +40,7 @@ public static class DependencyInjection
         services.AddOpenApi();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IPollService, PollService>();
+        services.AddScoped<IQuestionServise, QuestionServise>();
 
         services
             .AddFluentValidationAutoValidation()
