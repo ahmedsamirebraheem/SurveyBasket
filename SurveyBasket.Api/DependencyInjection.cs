@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+using SurveyBasket.Api.Errors;
 using SurveyBasket.Authentication;
 using System.Reflection;
 using System.Text;
@@ -47,6 +48,9 @@ public static class DependencyInjection
         var mappingConfig = TypeAdapterConfig.GlobalSettings;
         mappingConfig.Scan(Assembly.GetExecutingAssembly());
         services.AddSingleton<IMapper>(new Mapper(mappingConfig));
+
+        services.AddExceptionHandler<GlobalExeptionHandler>();
+        services.AddProblemDetails();
         return services;
     }
     private static IServiceCollection AddAuthConfig(this IServiceCollection services, IConfiguration configuration)

@@ -9,7 +9,7 @@ public static class ResultExtensions
             throw new InvalidOperationException("Cannot convert a successful result to a problem.");
         }
 
-        var problem = Results.Problem(statusCode: statusCode);
+        var problem = Results.Problem();
         var problemDetails = problem.GetType().GetProperty(nameof(ProblemDetails))!.GetValue(problem) as ProblemDetails;
         problemDetails!.Extensions =new Dictionary<string, object?>
         {
