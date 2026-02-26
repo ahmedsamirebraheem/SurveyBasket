@@ -41,6 +41,7 @@ public static class DependencyInjection
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IPollService, PollService>();
         services.AddScoped<IQuestionServise, QuestionServise>();
+        services.AddScoped<IVoteServise, VoteServise>();
 
         services
             .AddFluentValidationAutoValidation()

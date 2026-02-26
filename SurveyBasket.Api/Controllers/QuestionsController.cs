@@ -11,45 +11,45 @@ namespace SurveyBasket.Api.Controllers;
 public class QuestionsController(IQuestionServise questionServise) : ControllerBase
 {
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get([FromRoute] int pollId,[FromRoute]int id, CancellationToken cancellationToken)
+    public async Task<IActionResult> Get([FromRoute] int pollId, [FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await questionServise.GetByIdAsync(pollId, id, cancellationToken);
-        return result.IsSuccess? Ok(result.Value):result.ToProblem();
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
     }
     [HttpGet("")]
-    public async Task<IActionResult> GetAll([FromRoute] int pollId,CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromRoute] int pollId, CancellationToken cancellationToken)
     {
         var result = await questionServise.GetAllAsync(pollId, cancellationToken);
-        return result.IsSuccess? Ok(result.Value):result.ToProblem();
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
     }
     [HttpPost("")]
     public async Task<IActionResult> Add([FromRoute] int pollId, [FromBody] QuestionRequest request, CancellationToken cancellationToken = default)
     {
         var result = await questionServise.AddAsync(pollId, request, cancellationToken);
 
-        if (result.IsSuccess)
-            return CreatedAtAction(nameof(Get), new {pollId,result.Value.Id},result.Value);
+        return result.IsSuccess
+        ? CreatedAtAction(nameof(Get), new { pollId, result.Value.Id }, result.Value)
+        : result.ToProblem();
 
-        return result.ToProblem();
-            
 
     }
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] int pollId, [FromRoute] int id, [FromBody] QuestionRequest request, CancellationToken cancellationToken = default)
     {
-        var result = await questionServise.UpdateAsync(pollId,id, request, cancellationToken);
+        var result = await questionServise.UpdateAsync(pollId, id, request, cancellationToken);
 
-        if (result.IsSuccess)
-            return NoContent();
+        return result.IsSuccess
+            ?
+             NoContent():
 
-        return result.ToProblem();
+         result.ToProblem();
 
 
     }
     [HttpPut("{id}/toggleStatus")]
-    public async Task<IActionResult> ToggleStatus([FromRoute] int pollId,[FromRoute]int id, CancellationToken cancellationToken)
+    public async Task<IActionResult> ToggleStatus([FromRoute] int pollId, [FromRoute] int id, CancellationToken cancellationToken)
     {
-        var result = await questionServise.ToggleStatusAsync(pollId,id, cancellationToken);
+        var result = await questionServise.ToggleStatusAsync(pollId, id, cancellationToken);
 
         return result.IsSuccess ? NoContent() : result.ToProblem();
     }
