@@ -1,11 +1,13 @@
-﻿using SurveyBasket.Api.Contracts.Answers;
+﻿using Microsoft.Extensions.Caching.Hybrid;
+using SurveyBasket.Api.Contracts.Answers;
 using SurveyBasket.Api.Contracts.Questions;
 using SurveyBasket.Api.Entities;
 
 namespace SurveyBasket.Api.Services;
 
-public class QuestionServise(ApplicationDbContext dbContext) : IQuestionServise
+public class QuestionServise(ApplicationDbContext dbContext, HybridCache hybridCache) : IQuestionServise
 {
+    private const string _cachePrefix = "availableQuestions";
     public async Task<Result<IEnumerable<QuestionResponse>>> GetAllAsync(int pollId, CancellationToken cancellationToken = default)
     {
         var pollIsExists = await dbContext.Polls.AnyAsync(x => x.Id == pollId, cancellationToken);
@@ -13,18 +15,32 @@ public class QuestionServise(ApplicationDbContext dbContext) : IQuestionServise
         {
             return Result.Failure<IEnumerable<QuestionResponse>>(PollErrors.PollNotFound);
         }
-        var questions = await dbContext.Questions
+
+        var cacheKey = $"{_cachePrefix} - {pollId}";
+
+        var questions = await hybridCache.GetOrCreateAsync<IEnumerable<QuestionResponse>>(
+            cacheKey,
+          async  cacheEntry =>
+             await dbContext.Questions
             .Where(x => pollId == x.PollId)
             .Include(x => x.Answers)
-            //.Select(q=>new QuestionResponse
-            //(
-            //    q.Id,
-            //    q.Content,
-            //    q.Answers.Select(a=>new AnswerResponse(a.Id,a.Content))
-            //))
             .ProjectToType<QuestionResponse>()
             .AsNoTracking()
-            .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken)
+            );
+
+        //var questions = await dbContext.Questions
+        //    .Where(x => pollId == x.PollId)
+        //    .Include(x => x.Answers)
+        //    //.Select(q=>new QuestionResponse
+        //    //(
+        //    //    q.Id,
+        //    //    q.Content,
+        //    //    q.Answers.Select(a=>new AnswerResponse(a.Id,a.Content))
+        //    //))
+        //    .ProjectToType<QuestionResponse>()
+        //    .AsNoTracking()
+        //    .ToListAsync(cancellationToken);
 
         return Result.Success<IEnumerable<QuestionResponse>>(questions);
 
@@ -48,9 +64,6 @@ public class QuestionServise(ApplicationDbContext dbContext) : IQuestionServise
         {
             return Result.Failure<IEnumerable<QuestionResponse>>(VoteErrors.DuplicatedVote);
         }
-       
-
-       
 
         var questions = await dbContext
             .Questions
@@ -100,6 +113,8 @@ public class QuestionServise(ApplicationDbContext dbContext) : IQuestionServise
 
         await dbContext.Questions.AddAsync(question, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
+
+        await hybridCache.RemoveAsync($"{_cachePrefix} - {pollId}", cancellationToken);
         return Result.Success(question.Adapt<QuestionResponse>());
     }
     public async Task<Result> UpdateAsync(int pollId, int id, QuestionRequest request, CancellationToken cancellationToken = default)
@@ -133,6 +148,8 @@ public class QuestionServise(ApplicationDbContext dbContext) : IQuestionServise
 
         });
         await dbContext.SaveChangesAsync(cancellationToken);
+        await hybridCache.RemoveAsync($"{_cachePrefix} - {pollId}", cancellationToken);
+
         return Result.Success();
     }
 
@@ -146,6 +163,7 @@ public class QuestionServise(ApplicationDbContext dbContext) : IQuestionServise
         question.IsActive = !question.IsActive;
 
         await dbContext.SaveChangesAsync(cancellationToken);
+        await hybridCache.RemoveAsync($"{_cachePrefix} - {pollId}", cancellationToken);
 
         return Result.Success();
     }
