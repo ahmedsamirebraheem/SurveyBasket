@@ -1,6 +1,11 @@
 ﻿using Azure.Core;
+using SurveyBasket.Api.Abstractions;
+using SurveyBasket.Api.Contracts.Polls;
+using SurveyBasket.Api.Entities;
+using SurveyBasket.Api.Errors;
+using SurveyBasket.Api.Persistence;
 
-namespace SurveyBasket.Services;
+namespace SurveyBasket.Api.Services;
 
 public class PollService(ApplicationDbContext context) : IPollService
 {

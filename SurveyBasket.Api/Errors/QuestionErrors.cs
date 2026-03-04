@@ -1,4 +1,6 @@
-﻿namespace SurveyBasket.Errors;
+﻿using SurveyBasket.Api.Abstractions;
+
+namespace SurveyBasket.Api.Errors;
 
 public static class QuestionErrors
 {

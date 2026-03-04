@@ -1,6 +1,7 @@
-﻿using OneOf;
+﻿using SurveyBasket.Api.Abstractions;
+using SurveyBasket.Api.Contracts.Authentication;
 
-namespace SurveyBasket.Services;
+namespace SurveyBasket.Api.Services;
 
 public interface IAuthService
 { 
@@ -8,4 +9,7 @@ public interface IAuthService
     //Task<OneOf<AuthResponse, Error>> GetTokenAsync(string email, string password, CancellationToken cancellationToken = default);
     Task<Result<AuthResponse>> GetRefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken = default);
     Task<Result> RevokeRefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken = default);
+    Task<Result> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default);
+    Task<Result> ConfirmEmailAsync(ConfirmEmailRequest request);
+    Task<Result> ResendConfirmationEmailAsync(ResendConfirmationEailRequest request,CancellationToken cancellationToken=default);
 }

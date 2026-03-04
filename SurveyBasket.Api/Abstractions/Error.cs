@@ -1,4 +1,4 @@
-﻿namespace SurveyBasket.Abstractions;
+﻿namespace SurveyBasket.Api.Abstractions;
 
 public record Error(string Code, string Description, int? StatusCode)
 {

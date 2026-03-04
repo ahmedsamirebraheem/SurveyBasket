@@ -1,12 +1,16 @@
 ﻿using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+using SurveyBasket.Api.Authentication;
+using SurveyBasket.Api.Entities;
 using SurveyBasket.Api.Errors;
+using SurveyBasket.Api.Persistence;
 using SurveyBasket.Api.Services;
-using SurveyBasket.Authentication;
+using SurveyBasket.Api.Settings;
 using System.Reflection;
 using System.Text;
 
@@ -45,6 +49,7 @@ public static class DependencyInjection
         services.AddScoped<IQuestionServise, QuestionServise>();
         services.AddScoped<IVoteServise, VoteServise>();
         services.AddScoped<IResultServise, ResultServise>();
+        services.AddScoped<IEmailSender, EmailService>();
 
 
         services
@@ -58,12 +63,18 @@ public static class DependencyInjection
 
         services.AddExceptionHandler<GlobalExeptionHandler>();
         services.AddProblemDetails();
+
+        services.AddHttpContextAccessor();
+
+        services.Configure<MailSettings>(configuration.GetSection(nameof(MailSettings)));
+
         return services;
     }
     private static IServiceCollection AddAuthConfig(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
         services.AddSingleton<IJwtProvider, JwtProvider>();
 
@@ -94,8 +105,16 @@ public static class DependencyInjection
                 ValidAudience = jwtSettings.Audience,
 
             };
-        })
-            ;
+        });
+
+        services.Configure<IdentityOptions>(options =>
+        {
+
+            options.Password.RequiredLength = 8;
+            //options.SignIn.RequireConfirmedEmail = true;
+            options.User.RequireUniqueEmail = true;
+
+        });
 
         return services;
     }

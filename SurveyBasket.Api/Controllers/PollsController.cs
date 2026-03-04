@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using SurveyBasket.Api.Abstractions;
+using SurveyBasket.Api.Contracts.Polls;
+using SurveyBasket.Api.Services;
 
-namespace SurveyBasket.Controllers;
+namespace SurveyBasket.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

@@ -1,4 +1,6 @@
-﻿namespace SurveyBasket.Persistence.EntitiesConfigurations;
+﻿using SurveyBasket.Api.Entities;
+
+namespace SurveyBasket.Api.Persistence.EntitiesConfigurations;
 
 public class PollConfiguration : IEntityTypeConfiguration<Poll>
 {

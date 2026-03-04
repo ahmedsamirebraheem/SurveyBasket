@@ -5,7 +5,7 @@ using SurveyBasket.Api.Extensions;
 using System.Reflection;
 using System.Security.Claims;
 
-namespace SurveyBasket.Persistence;
+namespace SurveyBasket.Api.Persistence;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor) : 
     IdentityDbContext<ApplicationUser>(options)

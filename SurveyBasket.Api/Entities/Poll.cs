@@ -1,6 +1,4 @@
-﻿using SurveyBasket.Api.Entities;
-
-namespace SurveyBasket.Entities;
+﻿namespace SurveyBasket.Api.Entities;
 
 public sealed class Poll : AuditableEntity
 {

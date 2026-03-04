@@ -1,4 +1,4 @@
-﻿namespace SurveyBasket.Entities;
+﻿namespace SurveyBasket.Api.Entities;
 
 public class AuditableEntity
 {

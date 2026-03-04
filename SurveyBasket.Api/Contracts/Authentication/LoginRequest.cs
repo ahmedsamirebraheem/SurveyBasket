@@ -1,4 +1,4 @@
-﻿namespace SurveyBasket.Contracts.Authentication;
+﻿namespace SurveyBasket.Api.Contracts.Authentication;
 
 public record LoginRequest(
     string Email,
