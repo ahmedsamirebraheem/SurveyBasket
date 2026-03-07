@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
 using SurveyBasket.Api.Abstractions;
@@ -25,12 +26,12 @@ public class AuthService(
 
     public async Task<Result<AuthResponse>> GetTokenAsync(string email, string password, CancellationToken cancellationToken = default)
     {
-        
+
 
         if (await userManager.FindByEmailAsync(email) is not { } user)
             return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
 
-        var result = await signInManager.PasswordSignInAsync(user,password,false,false);
+        var result = await signInManager.PasswordSignInAsync(user, password, false, false);
 
         if (result.Succeeded)
         {
@@ -51,12 +52,12 @@ public class AuthService(
             return Result.Success(response);
         }
 
-        return Result.Failure<AuthResponse>(result.IsNotAllowed? UserErrors.EmailNotConfirmed:UserErrors.InvalidCredentials);
+        return Result.Failure<AuthResponse>(result.IsNotAllowed ? UserErrors.EmailNotConfirmed : UserErrors.InvalidCredentials);
 
-       
+
     }
 
-   
+
     public async Task<Result<AuthResponse>> GetRefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken = default)
     {
         var userId = jwtProvider.ValidateToken(token);
@@ -66,12 +67,12 @@ public class AuthService(
 
         var user = await userManager.FindByIdAsync(userId);
 
-        if(user is null )
+        if (user is null)
             return Result.Failure<AuthResponse>(UserErrors.InvalidJwtToken);
 
         var userRefreshToken = user.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken && x.IsActive);
 
-        if (userRefreshToken is null) 
+        if (userRefreshToken is null)
             return Result.Failure<AuthResponse>(UserErrors.InvalidRefreshToken);
 
         userRefreshToken.RevokedOn = DateTime.UtcNow;
@@ -133,16 +134,16 @@ public class AuthService(
         {
             var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            logger.LogInformation("Confirmation Code: {code}",code);
+            logger.LogInformation("Confirmation Code: {code}", code);
 
-          await  SendConfirmationEmail(user, code);
+            await SendConfirmationEmail(user, code);
 
             return Result.Success();
         }
 
         var error = result.Errors.First();
 
-        return Result.Failure(new Error(error.Code,error.Description,StatusCodes.Status400BadRequest));
+        return Result.Failure(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
     }
 
     public async Task<Result> ConfirmEmailAsync(ConfirmEmailRequest request)
@@ -150,7 +151,7 @@ public class AuthService(
         if (await userManager.FindByIdAsync(request.UserId) is not { } user)
             return Result.Failure(error: UserErrors.InvalidCode);
 
-        if(user.EmailConfirmed)
+        if (user.EmailConfirmed)
             return Result.Failure(error: UserErrors.DuplicatedConfirmation);
 
         var code = request.Code;
@@ -166,17 +167,17 @@ public class AuthService(
         }
 
 
-        var result = await userManager.ConfirmEmailAsync(user,code);
+        var result = await userManager.ConfirmEmailAsync(user, code);
 
         if (result.Succeeded)
             return Result.Success();
-        
+
 
         var error = result.Errors.First();
 
         return Result.Failure(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
     }
-    public async Task<Result> ResendConfirmationEmailAsync(ResendConfirmationEailRequest request,CancellationToken cancellation)
+    public async Task<Result> ResendConfirmationEmailAsync(ResendConfirmationEailRequest request, CancellationToken cancellation)
     {
         if (await userManager.FindByEmailAsync(request.Email) is not { } user)
             return Result.Success();
@@ -211,6 +212,9 @@ public class AuthService(
 
                 );
 
-        await emailSender.SendEmailAsync(user.Email!, "☑ Survey Basket: Email Confirmation ", emailBody);
+        BackgroundJob.Enqueue(() => emailSender.SendEmailAsync(user.Email!, "☑ Survey Basket: Email Confirmation ", emailBody));
+
+        await Task.CompletedTask;
+         
     }
 }

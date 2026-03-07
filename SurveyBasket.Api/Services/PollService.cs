@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using Hangfire;
 using SurveyBasket.Api.Abstractions;
 using SurveyBasket.Api.Contracts.Polls;
 using SurveyBasket.Api.Entities;
@@ -7,7 +8,7 @@ using SurveyBasket.Api.Persistence;
 
 namespace SurveyBasket.Api.Services;
 
-public class PollService(ApplicationDbContext context) : IPollService
+public class PollService(ApplicationDbContext context,INotificationService notificationService) : IPollService
 {
     private readonly ApplicationDbContext _context = context;
 
@@ -98,6 +99,9 @@ public class PollService(ApplicationDbContext context) : IPollService
         poll.IsPublished = !poll.IsPublished;
 
         await _context.SaveChangesAsync(cancellationToken);
+
+        if (poll.IsPublished && poll.StartsAt == DateOnly.FromDateTime(DateTime.UtcNow))
+            BackgroundJob.Enqueue(()=>notificationService.SendNewPollsNotification(poll.Id));
 
         return Result.Success();
     }
