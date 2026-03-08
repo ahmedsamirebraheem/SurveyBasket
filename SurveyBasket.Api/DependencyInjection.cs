@@ -51,6 +51,7 @@ public static class DependencyInjection
         services.AddScoped<IVoteServise, VoteServise>();
         services.AddScoped<IResultServise, ResultServise>();
         services.AddScoped<IEmailSender, EmailService>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<INotificationService, NotificationService>();
 
 
