@@ -1,4 +1,6 @@
-﻿using SurveyBasket.Api.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using SurveyBasket.Api.Abstractions.Consts;
+using SurveyBasket.Api.Entities;
 
 namespace SurveyBasket.Api.Persistence.EntitiesConfigurations;
 
@@ -14,5 +16,23 @@ public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 
         builder.Property(x => x.FirstName).HasMaxLength(100);
         builder.Property(x => x.LastName).HasMaxLength(100);
+
+        //default data
+        //var passwordHasher = new PasswordHasher<ApplicationUser>();
+        builder.HasData(new ApplicationUser
+        {
+            Id = DefaultUsers.AdminId,
+            FirstName = "Survey Basket",
+            LastName = "Admin",
+            UserName = DefaultUsers.AdminEmail,
+            NormalizedUserName = DefaultUsers.AdminEmail.ToUpper(),
+            Email = DefaultUsers.AdminEmail,
+            NormalizedEmail = DefaultUsers.AdminEmail.ToUpper(),
+            SecurityStamp = DefaultUsers.AdminSecurityStamp,
+            ConcurrencyStamp = DefaultUsers.AdminConcurrencyStamp,
+            EmailConfirmed = true,
+            // PasswordHash = passwordHasher.HashPassword(null!, DefaultUsers.AdminPassword)
+            PasswordHash = "AQAAAAIAAYagAAAAEOLdLESBbKMIYtQuy/GRevo6VwoMNIsSAG4w18ig0VL/MytFg4l0CenLhnGOH8SM8g=="
+        });
     }
 }

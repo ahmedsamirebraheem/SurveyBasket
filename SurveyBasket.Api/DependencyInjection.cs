@@ -1,12 +1,14 @@
 ﻿using Hangfire;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using SurveyBasket.Api.Authentication;
+using SurveyBasket.Api.Authentication.Filters;
 using SurveyBasket.Api.Entities;
 using SurveyBasket.Api.Errors;
 using SurveyBasket.Api.Persistence;
@@ -76,9 +78,12 @@ public static class DependencyInjection
     }
     private static IServiceCollection AddAuthConfig(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddIdentity<ApplicationUser, IdentityRole>()
+        services.AddIdentity<ApplicationUser, ApplicationRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
+        services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
+        services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
         services.AddSingleton<IJwtProvider, JwtProvider>();
 

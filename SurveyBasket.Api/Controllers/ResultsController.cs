@@ -2,13 +2,15 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SurveyBasket.Api.Abstractions;
+using SurveyBasket.Api.Abstractions.Consts;
+using SurveyBasket.Api.Authentication.Filters;
 using SurveyBasket.Api.Services;
 
 namespace SurveyBasket.Api.Controllers;
 
 [Route("api/polls/{pollId}/[controller]")]
 [ApiController]
-[Authorize]
+[HasPermission(Permissions.Results)]
 public class ResultsController(IResultServise resultServise) : ControllerBase
 {
     [HttpGet("row-data")]

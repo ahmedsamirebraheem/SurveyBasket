@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SurveyBasket.Api.Abstractions;
 using SurveyBasket.Api.Contracts.Users;
@@ -9,6 +10,7 @@ namespace SurveyBasket.Api.Controllers;
 
 [Route("me")]
 [ApiController]
+[Authorize]
 public class AccountController(IUserService userService) : ControllerBase
 {
     [HttpGet("")]
