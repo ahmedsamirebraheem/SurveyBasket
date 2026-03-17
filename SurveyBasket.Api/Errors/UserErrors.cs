@@ -6,6 +6,13 @@ public static class UserErrors
 {
     public static readonly Error InvalidCredentials = 
         new("User.InvalidCredentials", "Invalid email/password",StatusCodes.Status401Unauthorized);
+   
+    public static readonly Error DisabledUser =
+        new("User.DisabledUser", "This user is Disabled User, please contact your Admin", StatusCodes.Status401Unauthorized);
+
+    public static readonly Error LockedUser =
+      new("User.LockedUser", "This user is LockedOut , please contact your Admin", StatusCodes.Status401Unauthorized);
+
 
     public static readonly Error InvalidJwtToken =
         new("User.InvalidJwtToken", "Invalid Jwt token",StatusCodes.Status401Unauthorized);
@@ -25,5 +32,10 @@ public static class UserErrors
     public static readonly Error DuplicatedConfirmation =
        new("User.DuplicatedConfirmation", "This email is already confirmed", StatusCodes.Status400BadRequest);
 
+    public static readonly Error UserNotFound =
+        new("User.UserNotFound", "User Is Not Found", StatusCodes.Status404NotFound);
+    
+    public static readonly Error InvalidRoles =
+            new("User.InvalidRoles", "Invalid Roles", StatusCodes.Status400BadRequest);
 
 }

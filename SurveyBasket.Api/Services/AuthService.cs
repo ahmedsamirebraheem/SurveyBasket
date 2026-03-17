@@ -35,7 +35,10 @@ public class AuthService(
         if (await userManager.FindByEmailAsync(email) is not { } user)
             return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
 
-        var result = await signInManager.PasswordSignInAsync(user, password, false, false);
+        if (user.IsDisabled)
+            return Result.Failure<AuthResponse>(UserErrors.DisabledUser);
+
+        var result = await signInManager.PasswordSignInAsync(user, password, false, true);
 
         if (result.Succeeded)
         {
@@ -58,7 +61,13 @@ public class AuthService(
             return Result.Success(response);
         }
 
-        return Result.Failure<AuthResponse>(result.IsNotAllowed ? UserErrors.EmailNotConfirmed : UserErrors.InvalidCredentials);
+        var error = result.IsNotAllowed
+            ? UserErrors.EmailNotConfirmed
+            : result.IsLockedOut
+            ? UserErrors.LockedUser
+            : UserErrors.InvalidCredentials;
+
+        return Result.Failure<AuthResponse>(error);
 
 
     }
@@ -75,6 +84,12 @@ public class AuthService(
 
         if (user is null)
             return Result.Failure<AuthResponse>(UserErrors.InvalidJwtToken);
+
+        if (user.IsDisabled)
+            return Result.Failure<AuthResponse>(UserErrors.LockedUser);
+
+        if (user.LockoutEnd > DateTime.UtcNow)
+            return Result.Failure<AuthResponse>(UserErrors.DisabledUser);
 
         var userRefreshToken = user.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken && x.IsActive);
 
