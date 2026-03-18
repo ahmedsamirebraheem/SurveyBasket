@@ -7,7 +7,9 @@ using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using SurveyBasket.Api;
 using SurveyBasket.Api.Services;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Reflection;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,9 +33,13 @@ if (app.Environment.IsDevelopment())
     
 }
 
-app.UseSerilogRequestLogging();
+
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
+
+app.UseSerilogRequestLogging();
+
 app.UseHangfireDashboard("/jobs", new DashboardOptions
 {
     Authorization = [
@@ -57,6 +63,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseExceptionHandler();
+
+app.UseHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();

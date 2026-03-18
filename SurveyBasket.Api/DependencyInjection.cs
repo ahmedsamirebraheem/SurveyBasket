@@ -11,6 +11,7 @@ using SurveyBasket.Api.Authentication;
 using SurveyBasket.Api.Authentication.Filters;
 using SurveyBasket.Api.Entities;
 using SurveyBasket.Api.Errors;
+using SurveyBasket.Api.Health;
 using SurveyBasket.Api.Persistence;
 using SurveyBasket.Api.Services;
 using SurveyBasket.Api.Settings;
@@ -74,6 +75,12 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
 
         services.Configure<MailSettings>(configuration.GetSection(nameof(MailSettings)));
+
+        services.AddHealthChecks()
+            .AddSqlServer(name:"database",connectionString:connectionString)
+            .AddHangfire(options => { options.MinimumAvailableServers = 1; })
+            .AddUrlGroup(name: "external api",uri: new Uri("https://www.google.com"))
+            .AddCheck<MailProviderHealthCheck>(name:"mail service");
 
         return services;
     }
