@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.RateLimiting;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.RateLimiting;
 using SurveyBasket.Api.Abstractions;
 using SurveyBasket.Api.Abstractions.Consts;
 using SurveyBasket.Api.Contracts.Authentication;

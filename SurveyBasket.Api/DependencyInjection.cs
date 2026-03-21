@@ -21,6 +21,7 @@ using System.Reflection;
 using System.Text;
 using SurveyBasket.Api.Extensions;
 using SurveyBasket.Api.Abstractions.Consts;
+using Asp.Versioning;
 
 namespace SurveyBasket.Api;
 
@@ -86,7 +87,20 @@ public static class DependencyInjection
             .AddUrlGroup(name: "external api",uri: new Uri("https://www.google.com"))
             .AddCheck<MailProviderHealthCheck>(name:"mail service");
 
-        services.AddRateLimiting();
+        services.AddRateLimitingCongig();
+
+        services.AddApiVersioning(options =>
+        {
+            options.DefaultApiVersion = new ApiVersion(1);
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.ReportApiVersions = true;
+
+            options.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
+        }).AddApiExplorer(options =>
+        {
+            options.GroupNameFormat = "'v'V";
+            options.SubstituteApiVersionInUrl = true;
+        });
 
         return services;
     }
@@ -155,7 +169,7 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddRateLimiting(this IServiceCollection services)
+    private static IServiceCollection AddRateLimitingCongig(this IServiceCollection services)
     {
         services.AddRateLimiter(rateLimiterOptions =>
         {

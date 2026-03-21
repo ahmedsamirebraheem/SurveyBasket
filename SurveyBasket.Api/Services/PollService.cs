@@ -18,7 +18,7 @@ public class PollService(ApplicationDbContext context,INotificationService notif
         return polls.Adapt<IEnumerable<PollResponse>>();
     }
 
-    public async Task<IEnumerable<PollResponse>> GetCurrentAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<PollResponse>> GetCurrentAsyncV1(CancellationToken cancellationToken = default)
     {
         var polls = await _context.Polls
             .AsNoTracking()
@@ -29,6 +29,18 @@ public class PollService(ApplicationDbContext context,INotificationService notif
             .ToListAsync(cancellationToken);
 
         return polls.Adapt<IEnumerable<PollResponse>>();
+    }
+    public async Task<IEnumerable<PollResponseV2>> GetCurrentAsyncV2(CancellationToken cancellationToken = default)
+    {
+        var polls = await _context.Polls
+            .AsNoTracking()
+            .Where(
+            x=>x.IsPublished 
+            && x.StartsAt <= DateOnly.FromDateTime(DateTime.UtcNow) 
+            && x.EndsAt >= DateOnly.FromDateTime(DateTime.UtcNow))
+            .ToListAsync(cancellationToken);
+
+        return polls.Adapt<IEnumerable<PollResponseV2>>();
     }
 
     public async Task<Result<PollResponse>> GetAsync(int id, CancellationToken cancellationToken = default)
