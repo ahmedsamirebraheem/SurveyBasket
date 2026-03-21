@@ -63,6 +63,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseRateLimiter();
 
 app.UseHealthChecks("/health", new HealthCheckOptions
 {
