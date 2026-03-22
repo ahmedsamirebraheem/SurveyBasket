@@ -1,4 +1,5 @@
-﻿using Hangfire;
+﻿using Asp.Versioning;
+using Hangfire;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -6,22 +7,22 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+using SurveyBasket.Api.Abstractions.Consts;
 using SurveyBasket.Api.Authentication;
 using SurveyBasket.Api.Authentication.Filters;
 using SurveyBasket.Api.Entities;
 using SurveyBasket.Api.Errors;
+using SurveyBasket.Api.Extensions;
 using SurveyBasket.Api.Health;
 using SurveyBasket.Api.Persistence;
 using SurveyBasket.Api.Services;
 using SurveyBasket.Api.Settings;
+using SurveyBasket.Api.Swagger;
 using System.Reflection;
 using System.Text;
-using SurveyBasket.Api.Extensions;
-using SurveyBasket.Api.Abstractions.Consts;
-using Asp.Versioning;
+using System.Threading.RateLimiting;
 
 namespace SurveyBasket.Api;
 
@@ -52,7 +53,12 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(connectionString));
 
-        services.AddOpenApi();
+        //services.AddOpenApi();
+        services.AddSwaggerGen(options =>
+        {
+            
+            options.OperationFilter<SwaggerDefaultValues>();
+        });
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IPollService, PollService>();
         services.AddScoped<IQuestionServise, QuestionServise>();
@@ -95,13 +101,18 @@ public static class DependencyInjection
             options.AssumeDefaultVersionWhenUnspecified = true;
             options.ReportApiVersions = true;
 
-            options.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
+           
+            options.ApiVersionReader = ApiVersionReader.Combine(
+                new UrlSegmentApiVersionReader(),
+                new HeaderApiVersionReader("x-api-version")
+            );
         }).AddApiExplorer(options =>
         {
             options.GroupNameFormat = "'v'V";
-            options.SubstituteApiVersionInUrl = true;
+            options.SubstituteApiVersionInUrl = true; 
         });
 
+        services.ConfigureOptions<SurveyBasket.Api.Swagger.ConfigureSwaggerOptions>();
         return services;
     }
     private static IServiceCollection AddAuthConfig(this IServiceCollection services, IConfiguration configuration)

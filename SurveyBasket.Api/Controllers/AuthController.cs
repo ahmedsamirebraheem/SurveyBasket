@@ -26,10 +26,7 @@ public class AuthController(IAuthService authService, ILogger<AuthController> lo
             ? Ok(authResult.Value)
             : authResult.ToProblem();
 
-        //return authResult.Match(
-        //    Ok,
-        //    error => Problem(statusCode: StatusCodes.Status400BadRequest, title: error.Code, detail: error.Description)
-        //);
+        
     }
 
     [HttpPost("refresh")]

@@ -11,7 +11,7 @@ namespace SurveyBasket.Api.Controllers;
 
 [ApiVersion(1,Deprecated = true)]
 [ApiVersion(2)]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
 public class PollsController(IPollService pollService) : ControllerBase
 {

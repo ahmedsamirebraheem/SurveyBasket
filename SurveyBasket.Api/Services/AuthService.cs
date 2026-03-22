@@ -307,29 +307,45 @@ public class AuthService(
 
     }
 
-    private async Task<(IEnumerable<string> roles, IEnumerable<string> permission)> GetRolesAndPermissions(ApplicationUser user,CancellationToken cancellationToken)
+    //private async Task<(IEnumerable<string> roles, IEnumerable<string> permission)> GetRolesAndPermissions(ApplicationUser user,CancellationToken cancellationToken)
+    //{
+    //    var userRoles = await userManager.GetRolesAsync(user);
+    //    //var userPermissions = await dbContext.Roles
+    //    //    .Join(dbContext
+    //    //    .RoleClaims,
+    //    //    role => role.Id,
+    //    //    claim => claim.RoleId, (role, claim) => new {
+    //    //        role,
+    //    //        claim
+    //    //    }).Where(x => userRoles.Contains(x.role.Name!))
+    //    //    .Select(x => x.claim.ClaimValue!)
+    //    //    .Distinct()
+    //    //    .ToListAsync(cancellationToken);
+
+    //    var userPermissions = await (
+    //        from r in dbContext.Roles
+    //        join p in dbContext.RoleClaims
+    //        on r.Id equals p.RoleId
+    //        where userRoles.Contains(r.Name!)
+    //        select p.ClaimValue!
+    //        ).Distinct()
+    //        .ToListAsync(cancellationToken);
+
+    //    return (userRoles, userPermissions);
+    //}
+
+    private async Task<(IEnumerable<string> roles, IEnumerable<string> permission)> GetRolesAndPermissions(ApplicationUser user, CancellationToken cancellationToken)
     {
         var userRoles = await userManager.GetRolesAsync(user);
-        //var userPermissions = await dbContext.Roles
-        //    .Join(dbContext
-        //    .RoleClaims,
-        //    role => role.Id,
-        //    claim => claim.RoleId, (role, claim) => new {
-        //        role,
-        //        claim
-        //    }).Where(x => userRoles.Contains(x.role.Name!))
-        //    .Select(x => x.claim.ClaimValue!)
-        //    .Distinct()
-        //    .ToListAsync(cancellationToken);
 
         var userPermissions = await (
             from r in dbContext.Roles
-            join p in dbContext.RoleClaims
-            on r.Id equals p.RoleId
+            join p in dbContext.RoleClaims on r.Id equals p.RoleId
             where userRoles.Contains(r.Name!)
+                  && p.ClaimType == "permissions" 
             select p.ClaimValue!
-            ).Distinct()
-            .ToListAsync(cancellationToken);
+        ).Distinct()
+        .ToListAsync(cancellationToken);
 
         return (userRoles, userPermissions);
     }

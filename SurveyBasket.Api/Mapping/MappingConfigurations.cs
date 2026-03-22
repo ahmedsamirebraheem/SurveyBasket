@@ -27,5 +27,13 @@ public class MappingConfigurations : IRegister
         config.NewConfig<UpdateUserRequest, ApplicationUser>()
            .Map(dest => dest.UserName, src => src.Email)
            .Map(dest => dest.NormalizedUserName, src => src.Email.ToUpper());
+
+
+        config.NewConfig<ApplicationUser, UserProfileResponse>()
+        .Map(dest => dest.Email, src => src.Email!) 
+        .Map(dest => dest.UserName, src => src.UserName!)
+        .Map(dest => dest.FirstName, src => src.FirstName)
+        .Map(dest => dest.LastName, src => src.LastName)
+        .MapToConstructor(true);
     }
 }

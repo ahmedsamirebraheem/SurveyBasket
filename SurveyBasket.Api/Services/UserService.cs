@@ -122,10 +122,16 @@ public class UserService(UserManager<ApplicationUser> userManager,IRoleService r
     public async Task<Result<UserProfileResponse>> GetProfileAsync(string userId)
     {
         var user = await userManager.Users
+            .AsNoTracking()
             .Where(x => x.Id == userId)
-            .ProjectToType<UserProfileResponse>()
-            .SingleAsync();
-        return Result.Success(user);
+            .SingleOrDefaultAsync();
+
+        if (user is null)
+            return Result.Failure<UserProfileResponse>(UserErrors.UserNotFound);
+
+        var response = user.Adapt<UserProfileResponse>();
+
+        return Result.Success(response);
     }
     public async Task<Result> UpdateProfileAsync(string userId, UpdateProfileRequest request)
     {
