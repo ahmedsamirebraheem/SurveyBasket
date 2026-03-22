@@ -10,6 +10,7 @@ using SurveyBasket.Api.Services;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Reflection;
 using HealthChecks.UI.Client;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,20 +25,22 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        // بنخلي الـ Swagger UI يقرأ كل الـ Versions اللي سجلناها أوتوماتيك
-        var descriptions = app.DescribeApiVersions();
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+    //app.UseSwagger();
+    //app.UseSwaggerUI(options =>
+    //{
+    //    // بنخلي الـ Swagger UI يقرأ كل الـ Versions اللي سجلناها أوتوماتيك
+    //    var descriptions = app.DescribeApiVersions();
 
-        foreach (var description in descriptions)
-        {
-            var url = $"/swagger/{description.GroupName}/swagger.json";
-            var name = description.GroupName.ToUpperInvariant();
-            options.SwaggerEndpoint(url, name);
-        }
+    //    foreach (var description in descriptions)
+    //    {
+    //        var url = $"/swagger/{description.GroupName}/swagger.json";
+    //        var name = description.GroupName.ToUpperInvariant();
+    //        options.SwaggerEndpoint(url, name);
+    //    }
        
-    });
+    //});
 
 
 }

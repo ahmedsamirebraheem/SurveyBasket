@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
 using Hangfire;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,10 +17,10 @@ using SurveyBasket.Api.Entities;
 using SurveyBasket.Api.Errors;
 using SurveyBasket.Api.Extensions;
 using SurveyBasket.Api.Health;
+using SurveyBasket.Api.OpenApiTransformers;
 using SurveyBasket.Api.Persistence;
 using SurveyBasket.Api.Services;
 using SurveyBasket.Api.Settings;
-using SurveyBasket.Api.Swagger;
 using System.Reflection;
 using System.Text;
 using System.Threading.RateLimiting;
@@ -53,12 +54,12 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(connectionString));
 
-        //services.AddOpenApi();
-        services.AddSwaggerGen(options =>
-        {
+        services.AddOpenApi();
+        //services.AddSwaggerGen(options =>
+        //{
             
-            options.OperationFilter<SwaggerDefaultValues>();
-        });
+        //    options.OperationFilter<SwaggerDefaultValues>();
+        //});
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IPollService, PollService>();
         services.AddScoped<IQuestionServise, QuestionServise>();
@@ -111,8 +112,31 @@ public static class DependencyInjection
             options.GroupNameFormat = "'v'V";
             options.SubstituteApiVersionInUrl = true; 
         });
+        services.AddEndpointsApiExplorer()
+            .AddOpenApiServices();
+      //  services.ConfigureOptions<SurveyBasket.Api.Swagger.ConfigureSwaggerOptions>();
+        return services;
+    }
 
-        services.ConfigureOptions<SurveyBasket.Api.Swagger.ConfigureSwaggerOptions>();
+    private static IServiceCollection AddOpenApiServices(this IServiceCollection services)
+    {
+        var serviceProvider = services.BuildServiceProvider();
+
+        var apiVersionDescriptionProvider = serviceProvider
+            .GetRequiredService<IApiVersionDescriptionProvider>();
+
+        foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions)
+        {
+
+            services.AddOpenApi(description.GroupName,options =>
+            {
+                options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+
+                options.AddDocumentTransformer(new ApiVersioningTransformer(description));
+            });
+        }
+
+            
         return services;
     }
     private static IServiceCollection AddAuthConfig(this IServiceCollection services, IConfiguration configuration)
