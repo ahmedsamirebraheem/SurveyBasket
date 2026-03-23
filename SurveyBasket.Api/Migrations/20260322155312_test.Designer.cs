@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SurveyBasket.Api.Persistence;
 
@@ -11,9 +12,11 @@ using SurveyBasket.Api.Persistence;
 namespace SurveyBasket.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260322155312_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,98 +55,98 @@ namespace SurveyBasket.Api.Migrations
                             Id = 1,
                             ClaimType = "permissions",
                             ClaimValue = "polls:add",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         },
                         new
                         {
                             Id = 2,
                             ClaimType = "permissions",
                             ClaimValue = "polls:delete",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         },
                         new
                         {
                             Id = 3,
                             ClaimType = "permissions",
                             ClaimValue = "polls:read",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         },
                         new
                         {
                             Id = 4,
                             ClaimType = "permissions",
                             ClaimValue = "polls:update",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         },
                         new
                         {
                             Id = 5,
                             ClaimType = "permissions",
                             ClaimValue = "questions:add",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         },
                         new
                         {
                             Id = 6,
                             ClaimType = "permissions",
                             ClaimValue = "questions:read",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         },
                         new
                         {
                             Id = 7,
                             ClaimType = "permissions",
                             ClaimValue = "questions:update",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         },
                         new
                         {
                             Id = 8,
                             ClaimType = "permissions",
                             ClaimValue = "results:read",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         },
                         new
                         {
                             Id = 9,
                             ClaimType = "permissions",
                             ClaimValue = "roles:add",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         },
                         new
                         {
                             Id = 10,
                             ClaimType = "permissions",
                             ClaimValue = "roles:read",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         },
                         new
                         {
                             Id = 11,
                             ClaimType = "permissions",
                             ClaimValue = "roles:update",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         },
                         new
                         {
                             Id = 12,
                             ClaimType = "permissions",
                             ClaimValue = "users:add",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         },
                         new
                         {
                             Id = 13,
                             ClaimType = "permissions",
                             ClaimValue = "users:read",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         },
                         new
                         {
                             Id = 14,
                             ClaimType = "permissions",
                             ClaimValue = "users:update",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         });
                 });
 
@@ -211,8 +214,8 @@ namespace SurveyBasket.Api.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "019d165a-c031-70a2-ab84-34643272ef15",
-                            RoleId = "019d165a-c031-7c51-b101-fa31b79e7adf"
+                            UserId = "F67E8083-A6CC-4D82-A25E-FC959D103AB7",
+                            RoleId = "D9832268-91AB-4DA9-B629-22303AE84748"
                         });
                 });
 
@@ -314,8 +317,8 @@ namespace SurveyBasket.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "019d165a-c031-7c51-b101-fa31b79e7adf",
-                            ConcurrencyStamp = "019d165a-c031-79dd-acd7-bc37bc6e8d6c",
+                            Id = "D9832268-91AB-4DA9-B629-22303AE84748",
+                            ConcurrencyStamp = "9130591D-ADE7-4579-AB58-1E115B5B404C",
                             IsDefault = false,
                             IsDeleted = false,
                             Name = "Admin",
@@ -323,8 +326,8 @@ namespace SurveyBasket.Api.Migrations
                         },
                         new
                         {
-                            Id = "019d165a-c031-7dd0-86a2-f0a4248e6e13",
-                            ConcurrencyStamp = "019d165a-c031-71ae-af48-6ce7c32ed161",
+                            Id = "C5B32D50-6790-4835-805A-7B2A9AFCA638",
+                            ConcurrencyStamp = "6725ADEA-6A12-453E-B5F5-0570BCCBE2A6",
                             IsDefault = true,
                             IsDeleted = false,
                             Name = "Member",
@@ -412,9 +415,9 @@ namespace SurveyBasket.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "019d165a-c031-70a2-ab84-34643272ef15",
+                            Id = "F67E8083-A6CC-4D82-A25E-FC959D103AB7",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "019d165a-c031-7838-950f-e263f082cf99",
+                            ConcurrencyStamp = "82F7C334-9F3A-4EBE-B30C-D6EB3A1C5BD7",
                             Email = "admin@servey-basket.com",
                             EmailConfirmed = true,
                             FirstName = "Survey Basket",

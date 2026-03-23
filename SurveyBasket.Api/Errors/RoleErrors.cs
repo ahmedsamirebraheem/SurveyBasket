@@ -2,7 +2,7 @@
 
 namespace SurveyBasket.Api.Errors;
 
-public static class RoleErrors
+public record RoleErrors
 {
     public static readonly Error RoleNotFound = 
         new("Role.RoleNotFound", "Role Is Not Found",StatusCodes.Status404NotFound);

@@ -86,7 +86,10 @@ public static class DependencyInjection
         services.AddBackgroundJobsConfig(configuration);
         services.AddHttpContextAccessor();
 
-        services.Configure<MailSettings>(configuration.GetSection(nameof(MailSettings)));
+        services.AddOptions<MailSettings>()
+            .BindConfiguration(nameof(MailSettings))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
         services.AddHealthChecks()
             .AddSqlServer(name:"database",connectionString:connectionString)
@@ -149,8 +152,6 @@ public static class DependencyInjection
         services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
         services.AddSingleton<IJwtProvider, JwtProvider>();
-
-        //services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
 
         services.AddOptions<JwtOptions>()
             .BindConfiguration(JwtOptions.SectionName)

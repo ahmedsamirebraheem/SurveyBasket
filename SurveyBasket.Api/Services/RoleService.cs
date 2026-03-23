@@ -10,9 +10,9 @@ namespace SurveyBasket.Api.Services;
 
 public class RoleService(RoleManager<ApplicationRole> roleManager, ApplicationDbContext dbContext):IRoleService
 {
-    public async Task<IEnumerable<RoleResponse>> GetAllAsync(bool? includeDisabled = false,CancellationToken cancellationToken = default) =>
+    public async Task<IEnumerable<RoleResponse>> GetAllAsync(bool includeDisabled = false,CancellationToken cancellationToken = default) =>
         await roleManager.Roles
-        .Where(x => !x.IsDefault && (!x.IsDeleted || (includeDisabled.HasValue && includeDisabled.Value)))
+        .Where(x => !x.IsDefault && (!x.IsDeleted || includeDisabled))
         .ProjectToType<RoleResponse>()
         .ToArrayAsync(cancellationToken);
 
@@ -42,7 +42,7 @@ public class RoleService(RoleManager<ApplicationRole> roleManager, ApplicationDb
         var role = new ApplicationRole
         {
             Name = request.Name,
-            ConcurrencyStamp = Guid.NewGuid().ToString()
+            ConcurrencyStamp = Guid.CreateVersion7().ToString()
         };
 
         var result = await roleManager.CreateAsync(role);

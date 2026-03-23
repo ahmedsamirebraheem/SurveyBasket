@@ -71,8 +71,6 @@ public class AuthService(
 
 
     }
-
-
     public async Task<Result<AuthResponse>> GetRefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken = default)
     {
         var userId = jwtProvider.ValidateToken(token);
@@ -115,7 +113,6 @@ public class AuthService(
 
         return Result.Success(response);
     }
-
     public async Task<Result> RevokeRefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken = default)
     {
         var userId = jwtProvider.ValidateToken(token);
@@ -139,7 +136,6 @@ public class AuthService(
 
         return Result.Success();
     }
-
     public async Task<Result> RegisterAsync(Contracts.Authentication.RegisterRequest request, CancellationToken cancellationToken = default)
     {
         var emailIsExists = await userManager.Users.AnyAsync(x => x.Email == request.Email, cancellationToken);
@@ -167,7 +163,6 @@ public class AuthService(
 
         return Result.Failure(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
     }
-
     public async Task<Result> ConfirmEmailAsync(ConfirmEmailRequest request)
     {
         if (await userManager.FindByIdAsync(request.UserId) is not { } user)
@@ -225,7 +220,7 @@ public class AuthService(
             return Result.Success();
 
         if (!user.EmailConfirmed)
-            return Result.Failure(UserErrors.EmailNotConfirmed);
+            return Result.Failure(UserErrors.EmailNotConfirmed with { StatusCode=StatusCodes.Status400BadRequest});
 
         var code = await userManager.GeneratePasswordResetTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -287,7 +282,6 @@ public class AuthService(
         await Task.CompletedTask;
          
     }
-
     private async Task SendResetPasswordEmail(ApplicationUser user, string code)
     {
         var origin = httpContextAccessor.HttpContext?.Request.Headers.Origin;
@@ -306,35 +300,7 @@ public class AuthService(
         await Task.CompletedTask;
 
     }
-
-    //private async Task<(IEnumerable<string> roles, IEnumerable<string> permission)> GetRolesAndPermissions(ApplicationUser user,CancellationToken cancellationToken)
-    //{
-    //    var userRoles = await userManager.GetRolesAsync(user);
-    //    //var userPermissions = await dbContext.Roles
-    //    //    .Join(dbContext
-    //    //    .RoleClaims,
-    //    //    role => role.Id,
-    //    //    claim => claim.RoleId, (role, claim) => new {
-    //    //        role,
-    //    //        claim
-    //    //    }).Where(x => userRoles.Contains(x.role.Name!))
-    //    //    .Select(x => x.claim.ClaimValue!)
-    //    //    .Distinct()
-    //    //    .ToListAsync(cancellationToken);
-
-    //    var userPermissions = await (
-    //        from r in dbContext.Roles
-    //        join p in dbContext.RoleClaims
-    //        on r.Id equals p.RoleId
-    //        where userRoles.Contains(r.Name!)
-    //        select p.ClaimValue!
-    //        ).Distinct()
-    //        .ToListAsync(cancellationToken);
-
-    //    return (userRoles, userPermissions);
-    //}
-
-    private async Task<(IEnumerable<string> roles, IEnumerable<string> permission)> GetRolesAndPermissions(ApplicationUser user, CancellationToken cancellationToken)
+  private async Task<(IEnumerable<string> roles, IEnumerable<string> permission)> GetRolesAndPermissions(ApplicationUser user, CancellationToken cancellationToken)
     {
         var userRoles = await userManager.GetRolesAsync(user);
 

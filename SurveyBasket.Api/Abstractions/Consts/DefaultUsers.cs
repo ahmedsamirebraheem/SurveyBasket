@@ -2,9 +2,9 @@
 
 public static class DefaultUsers
 {
-    public const string AdminId = "F67E8083-A6CC-4D82-A25E-FC959D103AB7";
+    public const string AdminId = "019d165a-c031-70a2-ab84-34643272ef15";
     public const string AdminEmail = "admin@servey-basket.com";
-    public const string AdminPassword = "P@ssw0rd123";
+    public const string AdminPasswordHash = "AQAAAAIAAYagAAAAEDAQzZBJSDmRHWBQEnwTkUW6IVADUlCGA0R1aD8MvEiSdnCDZLKZvlvvOYBDVg1nLg==";
     public const string AdminSecurityStamp = "5923A6B3D3FF410EA0A94BA646A3BDE9";
-    public const string AdminConcurrencyStamp = "82F7C334-9F3A-4EBE-B30C-D6EB3A1C5BD7";
+    public const string AdminConcurrencyStamp = "019d165a-c031-7838-950f-e263f082cf99";
 }

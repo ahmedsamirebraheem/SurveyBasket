@@ -3,12 +3,12 @@
 public static class DefaultRoles
 {
     public const string Admin = nameof(Admin);
-    public const string AdminRoleId = "D9832268-91AB-4DA9-B629-22303AE84748";
-    public const string AdminRoleConcurrencyStamp = "9130591D-ADE7-4579-AB58-1E115B5B404C";
+    public const string AdminRoleId = "019d165a-c031-7c51-b101-fa31b79e7adf";
+    public const string AdminRoleConcurrencyStamp = "019d165a-c031-79dd-acd7-bc37bc6e8d6c";
 
 
     public const string Member = nameof(Member);
-    public const string MemberRoleId = "C5B32D50-6790-4835-805A-7B2A9AFCA638";
-    public const string MemberRoleConcurrencyStamp = "6725ADEA-6A12-453E-B5F5-0570BCCBE2A6";
+    public const string MemberRoleId = "019d165a-c031-7dd0-86a2-f0a4248e6e13";
+    public const string MemberRoleConcurrencyStamp = "019d165a-c031-71ae-af48-6ce7c32ed161";
 
 }
